@@ -4,8 +4,8 @@ use library : https://github.com/sdinari/NTPCentral
 
 
 # Description
-this program allows you to send data relating to a photovoltaic installation to the pvoutput.org site 
-via the famous esp8862 circuit, the circuit is compatible with the Aurora 3kw inverter.
+this program allows you to send data related to a photovoltaic installation to the pvoutput.org site 
+via the famous chip esp8862 , the circuit is compatible with the Aurora 3kw inverter.
 
 # Schematics
 
