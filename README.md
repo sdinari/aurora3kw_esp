@@ -8,4 +8,5 @@ this program allows you to send data relating to a photovoltaic installation to 
 via the famous esp8862 circuit, the circuit is compatible with the Aurora 3kw inverter.
 
 # Schematics
-[./aurora_esp2_schematic.png]
+
+![Alt text](./aurora_esp2_schematic.png?raw=true "Title")
