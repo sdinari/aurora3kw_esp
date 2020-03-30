@@ -827,10 +827,11 @@ int Crc16(byte *data, int offset, int count)
      return DayPvPower; 
     }  
  
-  
+  //modification command 21 to 22
+  //from 21 : inverter temperature to  22 :booster Temperature  
   float ReadPvTemperature() {
      float DayPvTemperature;//v5 inverter temperature
-     DayPvTemperature = ReadDspInfos(21);
+     DayPvTemperature = ReadDspInfos(22);//21
      return DayPvTemperature; 
     }  
       
