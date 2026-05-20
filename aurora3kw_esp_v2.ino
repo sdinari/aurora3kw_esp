@@ -87,50 +87,44 @@ void setup() {
 //  LOOP
 // ═════════════════════════════════════════════════════════════════════════════
 void loop() {
-  // Always serve the config portal
+  // 1. Toujours servir le portail en priorité absolue
   webConfig->handle();
 
-  // If we're in AP mode (no WiFi), just handle config and return
+  // Si non connecté, on s'arrête là pour ce cycle
   if (WiFi.status() != WL_CONNECTED) {
-    webConfig->handle();
     delay(10);
     return;
   }
 
-  // ── Update NTP time ────────────────────────────────────────────────────
-  timeClient->update();
+  // 2. Gestion du temps non-bloquante pour l'envoi des données
+  static unsigned long lastUploadTime = 0;
+  unsigned long currentMillis = millis();
 
-  // ── Build date / time strings for PVOutput ────────────────────────────
-  String formattedDate = timeClient->getFormattedDate();   // "2025-05-20T10:30:00Z"
-  int    splitT        = formattedDate.indexOf('T');
-  String dateStr       = formattedDate.substring(0, splitT);  // "2025-05-20"
-  dateStr.replace("-", "");                                    // "20250520"
-  String timeStr = String(timeClient->getHours()) + ":" + timeClient->getMinutes();
+  // On n'exécute le bloc de lecture/envoi que si l'intervalle est écoulé
+  if (lastUploadTime == 0 || (currentMillis - lastUploadTime >= cfg.upload_interval_ms)) {
+    
+    // Mettre à jour le temps NTP
+    timeClient->update();
 
-  // ── Read inverter serial (debug) ──────────────────────────────────────
-  Serial.println(F("\n[INV] Reading inverter..."));
-  Serial.print(F("  Serial : ")); Serial.println(inverter->readSerialNumber());
+    // Récupérer la date et l'heure
+    String formattedDate = timeClient->getFormattedDate();
+    int splitT = formattedDate.indexOf('T');
+    String dateStr = formattedDate.substring(0, splitT);
+    dateStr.replace("-", "");
+    String timeStr = String(timeClient->getHours()) + ":" + timeClient->getMinutes();
 
-  // ── Read all power data ───────────────────────────────────────────────
-  InverterData data = inverter->readData();
-  printData(data);
+    Serial.println(F("\n[INV] Reading inverter..."));
+    InverterData data = inverter->readData();
+    printData(data);
 
-  // ── Upload to PVOutput if data is valid ───────────────────────────────
-  if (data.valid) {
-    uploadToPVOutput(data, dateStr, timeStr);
-  } else {
-    Serial.println(F("[INV] Data invalid – skipping upload, retry in 20 s"));
-    delay(20000);
-    return;
-  }
-
-  // ── Wait for next upload interval ─────────────────────────────────────
-  Serial.printf("[MAIN] Next upload in %lu ms\n", cfg.upload_interval_ms);
-  // Use a non-blocking wait so the web server stays responsive
-  unsigned long t0 = millis();
-  while (millis() - t0 < cfg.upload_interval_ms) {
-    webConfig->handle();
-    delay(50);
+    if (data.valid) {
+      uploadToPVOutput(data, dateStr, timeStr);
+      lastUploadTime = currentMillis; // On réinitialise le délai normal
+    } else {
+      Serial.println(F("[INV] Data invalid – retrying in 20 s"));
+      // En cas d'erreur, on feinte en ajustant le timer pour re-tester dans 20s
+      lastUploadTime = currentMillis - cfg.upload_interval_ms + 20000;
+    }
   }
 }
 
