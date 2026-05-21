@@ -1,9 +1,3 @@
-# Schematics
-
-![Alt text](./aurora_esp2_schematic.png?raw=true "Title")
-
----------
-
 # aurora3kw_esp
 
 An ESP8266-based monitoring bridge that reads operational data from an **ABB / Power-One Aurora 3kW inverter** via RS485 and uploads it automatically to **PVOutput.org**.
@@ -38,7 +32,6 @@ The project uses an **ESP8266 (NodeMCU)**, a **TTL to RS485 converter**, and a *
 
 No hardcoded credentials needed. Everything is handled through a clean, native web interface:
 
-![Inverter Monitor Configuration Portal](image_7e09ee.png)
 <img width="1059" height="939" alt="image" src="https://github.com/user-attachments/assets/5ef65c90-d211-47bc-8506-9f2b42645d8d" />
 
 
