@@ -27,7 +27,7 @@ The project features a modern, responsive local web interface for easy initial c
 The project uses an **ESP8266 (NodeMCU)**, a **TTL to RS485 converter**, and a **Logic Level Shifter (5V ↔ 3.3V)** to ensure safe signaling between the ESP's 3.3V lines and the RS485 transceiver.
 
 ### Wiring Diagram
-![Schematics](image_7e0629.png)
+![Alt text](./aurora_esp2_schematic.png?raw=true "Title")
 
 * **ESP8266 TX/RX Pins:** Configured dynamically via SoftwareSerial within the driver.
 * **Inverter side:** Connect `A+`, `B-`, and `GND` to the corresponding RS485 terminal strip inside your Aurora inverter.
@@ -39,6 +39,8 @@ The project uses an **ESP8266 (NodeMCU)**, a **TTL to RS485 converter**, and a *
 No hardcoded credentials needed. Everything is handled through a clean, native web interface:
 
 ![Inverter Monitor Configuration Portal](image_7e09ee.png)
+<img width="1059" height="939" alt="image" src="https://github.com/user-attachments/assets/5ef65c90-d211-47bc-8506-9f2b42645d8d" />
+
 
 ### Parameters Breakdown:
 * **WIFI:** Target network SSID and Password.
